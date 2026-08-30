@@ -51,7 +51,8 @@ def run_grid(topology: str, fault: str, lam: float, model: str, repeats: int = 1
                     "ts": stamp, "topology": topology, "fault": fault, "lam": lam, "model": model,
                     "case_id": case.case_id, "rep": rep, "seed": seed, "error": error,
                     "faults_injected": cfg.log,
-                    "score": score_episode(case, trace, cfg.log),
+                    "score": score_episode(case, trace, cfg.log, cfg.calls),
+                    "calls": cfg.calls,
                     "trace": trace,
                 }
                 f.write(json.dumps(rec, default=str) + "\n")

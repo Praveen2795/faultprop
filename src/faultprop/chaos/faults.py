@@ -51,7 +51,8 @@ class FaultConfig:
     fault: Fault = Fault.NONE
     lam: float = 0.0          # probability a call misbehaves
     seed: int = 0
-    log: list[dict] = field(default_factory=list)   # every injected fault, for containment analysis
+    log: list[dict] = field(default_factory=list)    # injected faults only
+    calls: list[dict] = field(default_factory=list)  # EVERY tool call, in order, fault or not
 
 
 class ToolTimeout(Exception):
@@ -124,6 +125,11 @@ def wrap_tools(tools: list[Callable], cfg: FaultConfig) -> list:
         @functools.wraps(fn)
         def wrapped(*args, **kwargs):
             result = fn(*args, **kwargs)
+            # Record the call before any fault is applied, so a fault that raises
+            # (TIMEOUT / RATE_LIMIT) is still present in the ordered call log.
+            entry = {"seq": len(cfg.calls), "tool": name, "fault": None}
+            cfg.calls.append(entry)
+
             if cfg.fault == Fault.NONE or name == "execute_action":
                 return result                          # never fault the decision recorder
             fault = cfg.fault
@@ -134,6 +140,7 @@ def wrap_tools(tools: list[Callable], cfg: FaultConfig) -> list:
                 return result
             if rng.random() >= cfg.lam:
                 return result
+            entry["fault"] = fault.value
             cfg.log.append({"tool": name, "fault": fault.value})
             return _mutate(name, fault, result, rng)
 
