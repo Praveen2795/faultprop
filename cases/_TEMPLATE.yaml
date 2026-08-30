@@ -1,0 +1,25 @@
+# Copy to NNN-short-name.yaml. All values synthetic. Aim: 24 cases, ~6 per action, 3-4 ambiguous.
+case_id: "000-template"
+customer:
+  customer_id: "C000"
+  name: "Synthetic Person"
+  tenure_months: 24
+  prior_disputes: 0
+  tier: "standard"
+transactions:
+  - {txn_id: "T1", merchant: "Example Merchant", amount: 49.99, date: "2026-08-01", channel: "online"}
+dispute:
+  dispute_id: "D000"
+  txn_id: "T1"
+  customer_statement: "I don't recognise this charge."
+  filed_date: "2026-08-05"
+fraud:
+  score: 50
+  reason_codes: ["NEW_MERCHANT"]
+kyc:
+  verified: true
+  last_verified: "2026-06-01"
+  notes: ""
+correct_action: "ESCALATE_TO_HUMAN"
+rationale: "Why this is the right call, in one or two sentences."
+ambiguous: false

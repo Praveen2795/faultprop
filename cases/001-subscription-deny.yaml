@@ -1,0 +1,28 @@
+case_id: "001-subscription-deny"
+customer:
+  customer_id: "C001"
+  name: "Dana Whitfield"
+  tenure_months: 60
+  prior_disputes: 0
+  tier: "standard"
+transactions:
+  - {txn_id: "T1", merchant: "StreamFlix", amount: 15.99, date: "2026-08-01", channel: "recurring"}
+  - {txn_id: "T2", merchant: "StreamFlix", amount: 15.99, date: "2026-07-01", channel: "recurring"}
+  - {txn_id: "T3", merchant: "StreamFlix", amount: 15.99, date: "2026-06-01", channel: "recurring"}
+  - {txn_id: "T4", merchant: "StreamFlix", amount: 15.99, date: "2026-05-01", channel: "recurring"}
+  - {txn_id: "T5", merchant: "Grocery Mart", amount: 82.10, date: "2026-07-28", channel: "card_present"}
+dispute:
+  dispute_id: "D001"
+  txn_id: "T1"
+  customer_statement: "I never signed up for StreamFlix. Please refund."
+  filed_date: "2026-08-03"
+fraud:
+  score: 8
+  reason_codes: ["RECURRING_ESTABLISHED", "SAME_DEVICE"]
+kyc:
+  verified: true
+  last_verified: "2026-02-10"
+  notes: ""
+correct_action: "DENY"
+rationale: "Identical recurring charge for four consecutive months, low fraud score, same device; this is an authorised subscription."
+ambiguous: false

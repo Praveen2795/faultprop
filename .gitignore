@@ -1,0 +1,16 @@
+.env
+.venv/
+__pycache__/
+runs/*
+!runs/README.md
+!runs/samples/
+*.egg-info/
+.ipynb_checkpoints/
+paper/*.pdf
+paper/*.aux
+paper/*.log
+
+# never commit local MCP approval state or editor scratch
+.claude/
+.DS_Store
+# uv lock is committed on purpose (reproducibility); venv is not

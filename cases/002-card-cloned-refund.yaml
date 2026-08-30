@@ -1,0 +1,26 @@
+case_id: "002-card-cloned-refund"
+customer:
+  customer_id: "C002"
+  name: "Marcus Oyelaran"
+  tenure_months: 36
+  prior_disputes: 0
+  tier: "premium"
+transactions:
+  - {txn_id: "T1", merchant: "Electronics Depot", amount: 1249.00, date: "2026-08-02", channel: "card_present"}
+  - {txn_id: "T2", merchant: "Corner Cafe", amount: 6.40, date: "2026-08-02", channel: "card_present"}
+  - {txn_id: "T3", merchant: "Corner Cafe", amount: 6.40, date: "2026-08-01", channel: "card_present"}
+dispute:
+  dispute_id: "D002"
+  txn_id: "T1"
+  customer_statement: "I was at work all day and my card was in my wallet. I have never shopped at Electronics Depot. The cafe charges are mine."
+  filed_date: "2026-08-03"
+fraud:
+  score: 91
+  reason_codes: ["GEO_IMPOSSIBLE", "AMOUNT_ANOMALY", "NEW_MERCHANT"]
+kyc:
+  verified: true
+  last_verified: "2026-07-15"
+  notes: ""
+correct_action: "REFUND"
+rationale: "Card-present in a different city minutes apart from a genuine local purchase; very high fraud score with geo-impossibility; clean history."
+ambiguous: false

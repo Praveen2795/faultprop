@@ -1,0 +1,11 @@
+# Decision log
+| Date | Decision | Why |
+|---|---|---|
+| 2026-08-30 | Only two adversarial fault classes | Keep reliability as the headline; avoid the crowded IPI arena (see topic-selection/06) |
+| 2026-08-30 | Never fault `execute_action` | We want to measure wrong *decisions*, not a broken recorder |
+| 2026-08-30 | Deterministic scoring; LLM judge only for containment | Reviewer trust, reproducibility |
+| 2026-08-30 | `execute_action` is idempotent; the **first** call is binding and later calls return `already_recorded` | Smoke test on a local 2B model looped 23× on the same action, inflating tokens ~3×. A real bank system would not permit repeat money-moving calls. `n_actions` is retained as a metric of agent discipline. |
+| 2026-08-30 | Tool docstrings gained `Args:` sections | Strands' `@tool` parses that section for parameter descriptions; without it every parameter got the generic fallback `"Parameter <name>"`. Weak tool descriptions would cause tool-use failures that we would then misattribute to topology — a validity threat, not cosmetics. |
+| 2026-08-30 | Supervisor uses agents-as-tools by passing Agent instances directly in `tools=[...]` | Documented Strands pattern; the SDK converts each agent to a tool taking an `input` string. Manual `@tool` wrapping is unnecessary. |
+| 2026-08-30 | Containment tracing will use OpenTelemetry in-memory span export, not hand-rolled interception | Strands emits agent/cycle/LLM/tool spans natively. `SwarmResult.node_history` and `GraphResult.execution_order` give handoff structure directly. |
+| 2026-08-30 | Swarm/graph limits (`max_handoffs`, `max_iterations`, timeouts) will be set explicitly and recorded | Faults are expected to increase handoffs; silently hitting a framework default would confound "topology failed" with "framework capped it". |
