@@ -41,6 +41,7 @@ Owner: **P** Praveen · **Peer** delegable · 🔴 weekend deep block · 🟢 we
 - [ ] 0.4 🟢 P — ACM/AAAI membership; Zenodo account
 
 **Phase 1 · Build (Sep 8 – Oct 5)**
+- [ ] 1.0 🟢 P — read the six closest neighbours; two-page positioning note (four-axis intersection)
 - [ ] 1.1 🟢 **Peer** — 24 cases in `cases/` (2/24 done)
 - [ ] 1.2 🔴 P — supervisor topology
 - [ ] 1.3 🔴 P — swarm topology
@@ -69,13 +70,14 @@ Owner: **P** Praveen · **Peer** delegable · 🔴 weekend deep block · 🟢 we
 - [ ] 3.5 🟢 Peer — cold read
 - [ ] 3.6 🟢 P+Peer — public-release cleanup (README, LICENSE, samples, reproduce script)
 - [ ] 3.7 🟢 Peer draft — blog post
-- [ ] **3.8 🟢 P — arXiv + public GitHub + Zenodo DOI + blog (Dec 8–19)**
+- [ ] **3.8a 🟢 P — Nov 7 early-preprint decision: short arXiv if H0a/H0b replicate + one strong faulted result**
+- [ ] **3.8 🟢 P — full arXiv + public GitHub + Zenodo DOI + blog (Dec 8–19)**
 - [ ] 3.9 🟢 Peer — announcements
 
 **Phase 4 · Submit & profile (Dec – Feb 2027)**
 - [ ] 4.1 AAAI-27 workshop (Nov 20) — only if remote presentation allowed; decide Oct 2
 - [ ] 4.2 ICLR 2027 workshop submission (≈ early Feb ⚠ verify)
-- [ ] 4.3 reviewer sign-ups · 4.4 one talk · 4.5 Strands PRs · 4.6 letter groundwork · 4.7 RFI watch · 4.8 attorney consult
+- [ ] 4.3 reviewer sign-ups · 4.4 one talk · 4.5 Strands PRs · 4.6 letter groundwork · 4.7 RFI watch · 4.8 attorney consult · 4.9 fortnightly scoop watch
 
 ## Principles
 1. **No real data, no employer data, ever.** Everything here is synthetic.
