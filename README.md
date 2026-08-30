@@ -39,6 +39,7 @@ Owner: **P** Praveen · **Peer** delegable · 🔴 weekend deep block · 🟢 we
 - [ ] 0.2 🟢 P — arXiv account; endorsement status known; endorsers listed
 - [ ] 0.3 🟢 P — peers onboarded (`CONTRIBUTING.md`, repo access)
 - [ ] 0.4 🟢 P — ACM/AAAI membership; Zenodo account
+- [ ] 0.5 🟢 **Peer** — scoop watch: fortnightly arXiv search, log hits (starts Sep, runs to publication)
 
 **Phase 1 · Build (Sep 8 – Oct 5)**
 - [ ] 1.0 🟢 P — read the six closest neighbours; two-page positioning note (four-axis intersection)
@@ -77,7 +78,7 @@ Owner: **P** Praveen · **Peer** delegable · 🔴 weekend deep block · 🟢 we
 **Phase 4 · Submit & profile (Dec – Feb 2027)**
 - [ ] 4.1 AAAI-27 workshop (Nov 20) — only if remote presentation allowed; decide Oct 2
 - [ ] 4.2 ICLR 2027 workshop submission (≈ early Feb ⚠ verify)
-- [ ] 4.3 reviewer sign-ups · 4.4 one talk · 4.5 Strands PRs · 4.6 letter groundwork · 4.7 RFI watch · 4.8 attorney consult · 4.9 fortnightly scoop watch
+- [ ] 4.3 reviewer sign-ups · 4.4 one talk · 4.5 Strands PRs · 4.6 letter groundwork · 4.7 RFI watch · 4.8 attorney consult
 
 ## Principles
 1. **No real data, no employer data, ever.** Everything here is synthetic.

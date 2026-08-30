@@ -14,7 +14,8 @@ H0a (replication, no faults) At λ=0, silent-wrong rates order supervisor ≤ pi
 H0b (replication, under faults) Closed-loop/orchestrated designs (supervisor) recover from injected faults
     more often than the linear pipeline, consistent with MAS-FIRE (arXiv 2602.19843) — tested here with
     tool-boundary faults rather than their agent/message faults.
-    If either H0 fails, faulted results must be interpreted with caution and the discrepancy reported.
+    If either H0a or H0b fails, faulted results must be interpreted with caution and the discrepancy
+    reported prominently rather than buried.
 H1  Under injected faults the *gap* between structured (pipeline, supervisor) and unstructured (single, swarm)
     topologies widens: structure buys more safety when tools are unreliable than when they are reliable.
 H2  Swarm shows the worst containment: corrupted or injected values reach a second agent more often than in
