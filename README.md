@@ -51,6 +51,7 @@ Owner: **P** Praveen · **Peer** delegable · 🔴 weekend deep block · 🟢 we
 - [ ] 1.6 🟢 Peer — hand-score 20 traces vs `score_episode`
 - [ ] 1.7 🟢 P+Peer — tests for topologies + tracing
 - [ ] 1.8 🔴 P — 50-episode smoke, all 4 topologies
+- [ ] 1.8b 🟢 P — classify fault recoverability (does each fault have a recovery path?)
 - [ ] 1.9 🟢 P — **freeze `docs/hypotheses.md` + analysis plan**
 - [ ] **G1 — Oct 5 gate**
 
