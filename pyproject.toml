@@ -4,7 +4,7 @@ version = "0.0.1"
 description = "Fault propagation across multi-agent LLM topologies in a synthetic financial-service workflow"
 requires-python = ">=3.11"
 dependencies = [
-  "strands-agents[ollama]>=1.54",
+  "strands-agents[ollama,openai]>=1.54",
   "pydantic>=2",
   "pyyaml",
   "typer",

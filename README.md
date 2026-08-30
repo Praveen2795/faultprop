@@ -37,6 +37,9 @@ Owner: **P** Praveen · **Peer** delegable · 🔴 weekend deep block · 🟢 we
 **Phase 0 · Setup (Sep 1–7)**
 - [x] 0.1 ✅ P — `.env` + `faultprop smoke` passes (local `ollama:gemma4:e2b`, 2026-08-30)
 - [ ] 0.2 🟢 P — arXiv account; endorsement status known; endorsers listed
+- [ ] 0.6 🟢 P — **model bake-off**: run both cases on 3 candidates via OpenRouter, pick cheap model #1
+      `uv run faultprop grid --topology single --fault none --model openrouter:<id> --repeats 3`
+      compare: correct action, tool_calls, evidence_complete, tokens, latency. Cheapest *reliable* wins.
 - [ ] 0.3 🟢 P — peers onboarded (`CONTRIBUTING.md`, repo access)
 - [ ] 0.4 🟢 P — ACM/AAAI membership; Zenodo account
 - [ ] 0.5 🟢 **Peer** — scoop watch: fortnightly arXiv search, log hits (starts Sep, runs to publication)
