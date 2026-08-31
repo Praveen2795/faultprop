@@ -37,7 +37,7 @@ Owner: **P** Praveen · **Peer** delegable · 🔴 weekend deep block · 🟢 we
 **Phase 0 · Setup (Sep 1–7)**
 - [x] 0.1 ✅ P — `.env` + `faultprop smoke` passes (local `ollama:gemma4:e2b`, 2026-08-30)
 - [ ] 0.2 🟢 P — arXiv account; endorsement status known; endorsers listed
-- [ ] 0.6 🟢 P — **model bake-off**: run both cases on 3 candidates via OpenRouter, pick cheap model #1
+- [ ] 0.6 🟢 P — **model bake-off**: run both cases on 3 candidates via OpenRouter, pick the **workhorse** (must have a stronger same-family sibling — see DESIGN.md §5a)
       `uv run faultprop grid --topology single --fault none --model openrouter:<id> --repeats 3`
       compare: correct action, tool_calls, evidence_complete, tokens, latency. Cheapest *reliable* wins —
       **and it must have a stronger sibling in the same family** (needed as the tier control, see DESIGN §5a).
@@ -60,7 +60,7 @@ Owner: **P** Praveen · **Peer** delegable · 🔴 weekend deep block · 🟢 we
 - [ ] **G1 — Oct 5 gate**
 
 **Phase 2 · Run (Oct 6 – Nov 9)**
-- [ ] 2.1 🔴 P / 🟢 Peer — full grid, cheap model #1 (~8,640 episodes)
+- [ ] 2.1 🔴 P / 🟢 Peer — full grid, workhorse model (~8,640 episodes)
 - [ ] 2.2 🔴 P — reduced grids, model #2 + frontier
 - [ ] 2.3 🔴 P — containment judge
 - [ ] 2.4 🟢 **Peer** — hand-check 100 judgments, Cohen's κ
