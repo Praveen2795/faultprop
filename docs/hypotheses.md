@@ -25,6 +25,8 @@ H3  Quiet faults (WRONG_PLAUSIBLE, STALE) produce more silent wrong actions than
 H4  `fault_response = proceeded` is the dominant mechanism behind silent wrong actions, across topologies.
 H5  Safety costs tokens: topologies with fewer silent failures consume more tokens under faults.
 H6  Fault tolerance improves less with a stronger model than task accuracy does (echoing ToolMaze).
+    Scope: tested on ONE same-family pair (workhorse vs tier control) — a directional check, not a
+    scaling law. Phrase any claim as "in our setup"; see DESIGN.md §5a "Limits of this design".
 
 Analysis plan: per hypothesis, the exact comparison and statistic (write before running).
 - H0a/H1: silent_wrong rate per topology × λ, 95% Wilson CIs; H1 tested as a topology×λ interaction.
@@ -33,4 +35,4 @@ Analysis plan: per hypothesis, the exact comparison and statistic (write before 
 - H3: silent_wrong by fault class, quiet vs loud grouped, chi-squared.
 - H4: distribution of fault_response conditioned on silent_wrong.
 - H5: tokens vs silent_wrong per topology (Pareto plot), Spearman.
-- H6: Δ(success) vs Δ(silent_wrong) between cheap and frontier model.
+- H6: Δ(success) vs Δ(silent_wrong) between workhorse and same-family tier control (reduced grid; wide CIs expected — directional only).
