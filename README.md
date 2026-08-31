@@ -37,7 +37,9 @@ Owner: **P** Praveen · **Peer** delegable · 🔴 weekend deep block · 🟢 we
 **Phase 0 · Setup (Sep 1–7)**
 - [x] 0.1 ✅ P — `.env` + `faultprop smoke` passes (local `ollama:gemma4:e2b`, 2026-08-30)
 - [ ] 0.2 🟢 P — arXiv account; endorsement status known; endorsers listed
-- [ ] 0.6 🟢 P — **model bake-off**: run both cases on 3 candidates via OpenRouter, pick the **workhorse** (must have a stronger same-family sibling — see DESIGN.md §5a)
+- [ ] 0.6 🟢 P — **model bake-off**: run both cases on the 2 verified candidates via OpenRouter, pick the **workhorse**
+      candidates: `deepseek/deepseek-v4-flash-0731` ($11 full grid) · `z-ai/glm-5.3-flash` ($14 full grid)
+      whichever loses becomes the family control; its own family's Pro tier becomes the tier control
       `uv run faultprop grid --topology single --fault none --model openrouter:<id> --repeats 3`
       compare: correct action, tool_calls, evidence_complete, tokens, latency. Cheapest *reliable* wins —
       **and it must have a stronger sibling in the same family** (needed as the tier control, see DESIGN §5a).
