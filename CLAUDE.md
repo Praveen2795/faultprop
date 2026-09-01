@@ -21,6 +21,17 @@ uv run faultprop grid --topology single --fault stale --lam 0.5 --repeats 5
 4. **Deterministic scoring wherever possible.** LLM judging is only for containment, and must be validated against 100 hand-checks with an agreement rate reported.
 5. **Freeze `docs/hypotheses.md` before the full grid run.** Do not edit hypotheses after seeing results.
 6. Every episode is reproducible from its JSONL trace + seed. Seeds are derived, not random.
+   Fault decisions come from `hash(seed, tool, nth_call)` — **never a sequential RNG**, which would
+   make the fault pattern depend on how many tools a topology happened to call first.
+7. **A fault is logged only if it actually changed the tool's output.** `_mutate` returns
+   `_NOT_APPLIED` otherwise. Logging no-op faults biases every result toward "robust".
+
+## Known constraint — episodes must run sequentially
+`workflow/tools.py` keeps the current case in module globals (`_CURRENT`, `_ACTION_LOG`) set by
+`set_case()`. Correct for one episode at a time, unsafe under threads or processes. The full grid
+is 8,640 episodes; at the ~21 s/episode measured on the smoke run that is **roughly 50 hours
+serial**. Parallelising WP 2.1 means removing this global state first — pass the case explicitly
+or bind it per-episode with a `contextvars.ContextVar`. Do not add concurrency before then.
 
 ## Layout
 `workflow/` job + 6 mocked tools + case loader · `chaos/` fault injection · `topologies/` the four shapes + shared prompts · `metrics/` scoring · `runner.py` grid → JSONL in `runs/` · `cases/` YAML cases · `docs/` hypotheses, decisions, MAST mapping.

@@ -22,7 +22,14 @@ H2  Swarm shows the worst containment: corrupted or injected values reach a seco
     supervisor or pipeline.
 H3  Quiet faults (WRONG_PLAUSIBLE, STALE) produce more silent wrong actions than loud faults
     (TIMEOUT, RATE_LIMIT), because loud failures trigger escalation and quiet ones do not.
-H4  `fault_response = proceeded` is the dominant mechanism behind silent wrong actions, across topologies.
+H4  Among silent-wrong episodes, `fault_response = "proceeded"` (money moved with NO retry of
+    the faulted tool) outnumbers `"retried_then_proceeded"` — i.e. agents mostly fail to react
+    to a fault at all, rather than reacting and still getting it wrong.
+    ⚠️ Restated 2026-08-31. The original wording was unfalsifiable: `fault_response` was
+    computed as `final in MONEY_MOVING`, and `silent_wrong` also requires `final in
+    MONEY_MOVING`, so "proceeded" was guaranteed at 100% in every topology. The retry split
+    makes it testable. A stronger version — did the agent *notice* the fault — needs the
+    message trace from WP 1.5 and stays out of scope until then.
 H5  Safety costs tokens: topologies with fewer silent failures consume more tokens under faults.
 H6  Fault tolerance improves less with a stronger model than task accuracy does (echoing ToolMaze).
     Scope: tested on ONE same-family pair (workhorse vs tier control) — a directional check, not a
@@ -33,6 +40,6 @@ Analysis plan: per hypothesis, the exact comparison and statistic (write before 
 - H0b: recovery rate (safe_failure ∪ success after a fault) supervisor vs pipeline, Fisher exact.
 - H2: contained rate per multi-agent topology, Fisher exact pairwise.
 - H3: silent_wrong by fault class, quiet vs loud grouped, chi-squared.
-- H4: distribution of fault_response conditioned on silent_wrong.
+- H4: distribution of fault_response conditioned on silent_wrong, chi-squared over {proceeded, retried_then_proceeded, escalated, abandoned}. Episodes labelled `fault_after_decision` are excluded — the fault landed after execute_action, so the agent had no opportunity to respond.
 - H5: tokens vs silent_wrong per topology (Pareto plot), Spearman.
 - H6: Δ(success) vs Δ(silent_wrong) between workhorse and same-family tier control (reduced grid; wide CIs expected — directional only).

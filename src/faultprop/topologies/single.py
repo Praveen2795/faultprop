@@ -26,7 +26,7 @@ class SingleAgent(Topology):
                 callback_handler=None,
             )
             result = agent(task)
-        trace["latency_s"] = time.time() - t0
+        trace["latency_s"] = time.time() - t0   # agent call only; runner adds wall_s for the whole episode
         trace["usage"] = _usage(result)
         trace["stop_reason"] = getattr(result, "stop_reason", None)
         return trace

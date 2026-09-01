@@ -6,7 +6,7 @@ A trace is a plain dict:
     "messages": [ {agent, role, content} ... ],   # every inter-agent message, for containment
     "tool_calls": [ {agent, tool, args, result_or_error} ... ],
     "usage": {"input_tokens": int, "output_tokens": int},
-    "latency_s": float,
+    "latency_s": float,        # time inside the agent call; runner.py adds "wall_s" for the episode
   }
 """
 from __future__ import annotations
