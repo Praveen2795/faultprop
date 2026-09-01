@@ -26,6 +26,12 @@ H2  Swarm shows the worst containment: corrupted or injected values reach a seco
     holding everything in one context, may be safest against quiet faults — the opposite of the usual
     assumption. `provenance_retained` (DESIGN.md §4, needs WP 1.5 traces) is the diagnostic that
     tells these mechanisms apart. Both directions are reportable findings.
+    Sharpened prediction (same day): the mechanisms compress into an "evidence dial" — how much raw
+    evidence reaches the decider: single > supervisor > pipeline > swarm. For QUIET faults,
+    silent_wrong should track that ordering. For ADVERSARIAL faults the dial may invert: a
+    supervisor relaying a poisoned tool note transports the injection to its downstream target,
+    while the single agent has no downstream at all. Report silent_wrong per fault class, never
+    pooled. (See DESIGN.md §3c mechanism note for the full argument.)
 H3  Quiet faults (WRONG_PLAUSIBLE, STALE) produce more silent wrong actions than loud faults
     (TIMEOUT, RATE_LIMIT), because loud failures trigger escalation and quiet ones do not.
 H4  Among silent-wrong episodes, `fault_response = "proceeded"` (money moved with NO retry of
