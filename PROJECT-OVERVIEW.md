@@ -324,6 +324,7 @@ and report the two groups separately. **This is unresolved and is a good topic f
 | `tool_calls` | Total invocations; also catches thrashing under faults |
 | `fault_response` | What the agent did after the first fault: `escalated`, `proceeded` (moved money with no retry), `retried_then_proceeded` (retried the broken tool, then moved money anyway), `abandoned`, or `fault_after_decision` |
 | `retried_after_fault` | Did it call the same tool again after it misbehaved? |
+| `provenance_retained` *(multi-agent, planned with the tracing hook)* | Did the evidence that contradicts a quiet fault — reason codes, raw transactions — survive into the *deciding* agent's context, or die in a handoff summary? |
 
 Everything is scored **deterministically** wherever possible — the correct action is known, so
 checking it is a plain comparison. An LLM judge is used only for `contained`, and it will be
@@ -413,7 +414,7 @@ calling it your thesis.
 | **H0a** | *(Replication, no faults.)* At λ=0 the topology ordering matches Kim et al. — structured beats unstructured. | If we cannot reproduce a known result at baseline, every faulted number that follows is suspect. |
 | **H0b** | *(Replication, under faults.)* The supervisor recovers from faults more often than the linear pipeline, as MAS-FIRE found with agent-level faults. | Retests a published finding at the tool boundary. |
 | **H1** | Under faults the gap between topologies **widens** — structure buys more safety when tools are unreliable than when they are reliable. | The central claim. |
-| **H2** | The swarm shows the **worst containment** — corrupted values travel with the handoffs. | No central checkpoint to stop propagation. |
+| **H2** | The swarm shows the **worst containment** — corrupted values travel with the handoffs. | No central checkpoint to stop propagation. See §7.1 — containment cuts two ways. |
 | **H3** | Quiet faults (`WRONG_PLAUSIBLE`, `STALE`) produce more silent failures than loud ones (`TIMEOUT`, `RATE_LIMIT`). | Loud failures trigger escalation; quiet ones give the agent no reason to doubt. |
 | **H4** | Among silent-wrong episodes, `proceeded` (no retry at all) outnumbers `retried_then_proceeded`. | Tests whether agents fail to *react* to faults, versus reacting and still getting it wrong. |
 | **H5** | Safety costs tokens — the topologies with fewest silent failures consume the most. | The cost-safety Pareto frontier. |
@@ -422,6 +423,50 @@ calling it your thesis.
 **Results get reported either way.** A failed H0a or H0b is reported prominently, not buried. And
 a failed H1 would arguably be the *more* interesting paper: *"adding an orchestrator does not
 protect you when tools break"* is something practitioners would act on immediately.
+
+### 7.1 Three competing mechanisms, and the evidence dial
+
+Registered before running, because they pull in **opposite** directions — which is exactly what makes
+the experiment worth doing rather than a formality.
+
+1. **Choke-point containment (favours structure).** Supervisor and pipeline restrict `execute_action`
+   to the Resolver, limiting who can act on corrupted data.
+2. **Summarisation destroys detection evidence (favours the single agent).** The single agent holds
+   the flipped score, the contradicting reason codes and the transaction history in *one* context and
+   can notice the inconsistency. In a supervisor, the Risk agent's report ("high fraud risk, score 92")
+   plausibly drops the reason codes, while the Investigator's transaction history sits in a different
+   context — no agent ever holds both halves. Handoffs don't just move data, they summarise it, and
+   summarisation is where contradicting detail dies.
+3. **Side-by-side aggregation (favours the supervisor over the pipeline).** The supervisor is the one
+   place where *all* workers' reports land together, so it can spot that "four identical recurring
+   charges" contradicts "score 92" even when neither worker did. The pipeline has the same hop count
+   but never co-locates the evidence.
+
+**These compress into one axis — how much raw evidence reaches the agent that decides:**
+
+> single agent (everything) → supervisor (summaries of everything, side by side) → pipeline (a
+> summary of a summary) → swarm (whatever the handoff happened to carry)
+
+**Prediction:** for *quiet* faults, silent-failure rates should track that ordering — meaning the
+cheap single agent may be the **safest**, the opposite of the usual assumption. Two independent
+papers make that less surprising than it sounds: Kim et al. find tool-heavy tasks incur multi-agent
+overhead, and MAST opens by noting MAS *"performance gains on popular benchmarks are often minimal."*
+Neither studied faults, so neither predicts our result — but it would sit alongside existing evidence
+rather than against it.
+
+**Where the dial inverts — adversarial faults.** `POISONED_TOOL_DOC` plants an instruction aimed at
+*downstream* agents. The single agent has no downstream, so the payload never reaches a target. A
+supervisor that relays worker output faithfully **transports the injection**: the same property that
+contains accidental corruption can spread adversarial content.
+
+**Binding consequence for the analysis:** `silent_wrong` is **always reported per fault class, never
+pooled.** If structure helps on accidental faults and hurts on adversarial ones, a pooled number
+averages two opposite effects into a meaningless middle. `provenance_retained` is the diagnostic that
+tells mechanisms 1 and 3 apart from mechanism 2 in the data.
+
+*A useful thought experiment: a supervisor given every raw tool output is just the single agent
+rebuilt with extra hops and extra failure points — which shows the real design variable is evidence
+visibility, not the org chart. Kim et al.'s own phrasing agrees: they credit centralized *verification*, not centralized coordination.*
 
 ---
 
@@ -494,12 +539,18 @@ These are genuinely unresolved. Opinions welcome.
 
 1. **Fault recoverability.** Should every injected fault be recoverable, as ToolBench-X requires?
    If not, how do we separate "the agent failed" from "the task was impossible"? (See §5.5.)
+   *Partial answer so far: recoverability is **per-episode, not per-fault-type**. `WRONG_PLAUSIBLE`
+   on `fraud_score` is recoverable in case 001 because the reason codes and transaction history
+   contradict it — but at λ=0.5 a second fault can truncate the transactions in the same episode and
+   remove that evidence. Still open: how to classify and report the two strata.*
 2. **Are the four topologies the right four?** Should we add a debate/consensus topology, which is
    what Kim et al. mean by "decentralized"? Our swarm is handoff-with-single-decider, which is not
    the same thing.
 3. **How should `contained` be defined precisely?** "Bad data reached another agent" is intuitive
    but slippery. Does a paraphrase count? A summary that preserves the wrong conclusion but not
-   the wrong number?
+   the wrong number? *Related and now specified: `provenance_retained` (§5.6) asks the mirror-image
+   question — did the evidence that would **expose** the fault survive the handoff? Both need the
+   tracing hook, and both need a definition precise enough to implement.*
 4. **Is 24 cases enough** for the statistical claims we want to make, given 5 repeats and 18
    conditions?
 5. **Framework confound.** All four topologies are built in Strands. Swarm and graph have
@@ -531,6 +582,8 @@ uv run pytest -q                 # 19 tests should pass
 uv run faultprop cases           # list the dispute cases
 uv run faultprop smoke --model ollama:<local-model>   # one free local episode
 ```
+
+Two of those tasks have published reference points worth knowing: MAST reports inter-annotator **κ = 0.88** on its taxonomy (the bar our own agreement statistics get read against), and Cemri et al. released their [LLM-judge annotator](https://github.com/multi-agent-systems-failure-taxonomy/MAST), which we plan to use for failure labelling rather than inventing our own — validated on a hand-labelled sample first, since adopting an unvalidated judge is precisely the failure mode this project studies.
 
 Other delegable work: hand-scoring 20 traces to validate the metrics; hand-checking 100 containment
 judgments; labelling observed failures against the MAST taxonomy; drafting the Related Work section.

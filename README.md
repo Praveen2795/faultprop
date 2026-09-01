@@ -43,6 +43,7 @@ Owner: **P** Praveen · **Peer** delegable · 🔴 weekend deep block · 🟢 we
       `uv run faultprop grid --topology single --fault none --model openrouter:<id> --repeats 3`
       compare: correct action, tool_calls, evidence_complete, tokens, latency. Cheapest *reliable* wins —
       **and it must have a stronger sibling in the same family** (needed as the tier control, see DESIGN §5a).
+- [ ] 0.6b 🟢 P — *fallback only, if both candidates miss the ≥80% bar*: direct OpenAI key, GPT-5 Nano → Mini → 5 ladder
 - [ ] 0.3 🟢 P — peers onboarded (`CONTRIBUTING.md`, repo access)
 - [ ] 0.4 🟢 P — ACM/AAAI membership; Zenodo account
 - [ ] 0.5 🟢 **Peer** — scoop watch: fortnightly arXiv search, log hits (starts Sep, runs to publication)
