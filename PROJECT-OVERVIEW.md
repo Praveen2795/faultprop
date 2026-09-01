@@ -94,6 +94,71 @@ All four are built in **Strands**, AWS's open-source agent SDK. **Critically, al
 identical prompts and identical tools.** The only thing that varies is the wiring. Without that
 control the comparison is meaningless.
 
+### 3.3.1 The four topologies, drawn
+
+The multi-agent shapes use three specialist roles: **Investigator** (pulls the customer, dispute
+and transaction records), **Risk** (fraud score and KYC), and **Resolver** (decides and records the
+action).
+
+**One asymmetry matters more than any other**, and it is the mechanism behind hypothesis H2: in the
+supervisor and pipeline shapes, **only the Resolver may call `execute_action`** — there is a single
+choke point where money moves. In the swarm, **any peer may call it**. That is not an accident of
+implementation; it is what "no central coordinator" actually means, and it is why we expect
+corrupted data to reach a money-moving decision most easily there.
+
+**1 — Single agent.** One ReAct loop; no delegation, no handoffs, nothing to contain.
+
+```mermaid
+flowchart LR
+    A["Single Agent"]
+    A --> R["get_customer · get_transactions · get_dispute · fraud_score · kyc_status"]
+    A --> X["execute_action —  MONEY MOVES"]
+```
+
+**2 — Supervisor + workers.** A central orchestrator delegates and assembles. Every result passes
+back through the supervisor, which is the checkpoint that may or may not catch corrupted data.
+
+```mermaid
+flowchart TD
+    S["Supervisor"]
+    S -->|delegates| I["Investigator"]
+    S -->|delegates| K["Risk"]
+    S -->|delegates| V["Resolver"]
+    I -->|returns| S
+    K -->|returns| S
+    I --> RT["record tools"]
+    K --> FT["fraud_score · kyc_status"]
+    V --> X["execute_action — MONEY MOVES"]
+```
+
+**3 — Swarm.** Peers hand control directly to one another, in both directions. No checkpoint, and
+any peer can move money.
+
+```mermaid
+flowchart LR
+    I["Investigator"] <-->|handoff| K["Risk"]
+    K <-->|handoff| V["Resolver"]
+    I <-->|handoff| V
+    I --> X["execute_action — MONEY MOVES"]
+    K --> X
+    V --> X
+```
+
+**4 — Pipeline (fixed graph).** A predetermined order, no loops, no backtracking. The most
+auditable shape and the one most familiar to regulated industries.
+
+```mermaid
+flowchart LR
+    I["Investigator"] --> K["Risk"] --> V["Resolver"] --> X["execute_action — MONEY MOVES"]
+    I --> RT["record tools"]
+    K --> FT["fraud_score · kyc_status"]
+```
+
+Reading these four side by side is the fastest way to see the study's logic: the *same* job, the
+*same* tools, the *same* prompts — four different answers to "who is allowed to know what, and who
+is allowed to act."
+
+
 ### 3.4 What "fault injection" means
 
 Borrowed from chaos engineering (the discipline of deliberately breaking production systems to
