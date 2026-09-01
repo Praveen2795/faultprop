@@ -20,6 +20,12 @@ H1  Under injected faults the *gap* between structured (pipeline, supervisor) an
     topologies widens: structure buys more safety when tools are unreliable than when they are reliable.
 H2  Swarm shows the worst containment: corrupted or injected values reach a second agent more often than in
     supervisor or pipeline.
+    Mechanism note (2026-08-31, pre-freeze): containment cuts two ways. Structure restricts who can
+    ACT on bad data (choke point), but handoffs summarise, and summaries can drop the evidence that
+    would DETECT bad data (e.g. reason codes contradicting a flipped fraud score). The single agent,
+    holding everything in one context, may be safest against quiet faults — the opposite of the usual
+    assumption. `provenance_retained` (DESIGN.md §4, needs WP 1.5 traces) is the diagnostic that
+    tells these mechanisms apart. Both directions are reportable findings.
 H3  Quiet faults (WRONG_PLAUSIBLE, STALE) produce more silent wrong actions than loud faults
     (TIMEOUT, RATE_LIMIT), because loud failures trigger escalation and quiet ones do not.
 H4  Among silent-wrong episodes, `fault_response = "proceeded"` (money moved with NO retry of
